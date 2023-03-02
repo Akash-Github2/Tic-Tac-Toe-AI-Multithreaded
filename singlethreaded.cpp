@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#include <chrono>
+#include <unistd.h>
 using namespace std;
 #define vt vector
 
@@ -62,7 +64,7 @@ void doUserMove(vt<vt<char>> &board, char user) {
 }
 
 int findBestMove(vt<vt<char>> &board, bool isComp, int empty, char currPlayer, int depth) {
-    
+
     int optVal = isComp ? INT_MIN : INT_MAX;
     vt<int> optPositions; //array of ints within 0-8 (i*3+j)
     for (int i = 0; i < 3; ++i) {
@@ -138,20 +140,13 @@ int main() {
 
     for (int i = 0; i < 9; ++i) { //num empty squares = 9 - i
         if (isCompTurn) {
-            //picks random position for now - change to AI later
-            // for (int i = 0; i < 3; ++i) {
-            //     bool didMove = false;
-            //     for (int j = 0; j < 3; ++j) {
-            //         if (board[i][j] == '-') {
-            //             board[i][j] = comp;
-            //             didMove = true;
-            //             break;
-            //         }
-            //     }
-            //     if (didMove)
-            //         break;
-            // }
+            auto start = chrono::steady_clock::now();
             findBestMove(board, true, 9 - i, comp, 0);
+            auto end = chrono::steady_clock::now();
+
+            cout << "Elapsed time in milliseconds: "
+                << chrono::duration_cast<chrono::milliseconds>(end - start).count()
+                << " ms" << endl;
 
             cout << "Current Game Board:\n";
             printBoard(board);
